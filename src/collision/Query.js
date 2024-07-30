@@ -60,8 +60,8 @@ var Vertices = require('../geometry/Vertices');
      * Casts a ray segment against a set of bodies and returns all collisions, ray width is optional. Intersection points are not provided.
      * @method ray
      * @param {body[]} bodies
-     * @param {vector} startPoint
-     * @param {vector} endPoint
+     * @param {Vector} startPoint
+     * @param {Vector} endPoint
      * @param {number} [rayWidth]
      * @return {collision[]} Collisions
      */
@@ -108,7 +108,7 @@ var Vertices = require('../geometry/Vertices');
      * Returns all bodies whose vertices contain the given point, from the given set of bodies.
      * @method point
      * @param {body[]} bodies
-     * @param {vector} point
+     * @param {Vector} point
      * @return {body[]} The bodies matching the query
      */
     Query.point = function(bodies, point) {

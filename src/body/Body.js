@@ -456,7 +456,7 @@ var Axes = require('../geometry/Axes');
      * Invalid if the `centre` falls outside the body's convex hull.
      * @method setCentre
      * @param {body} body
-     * @param {vector} centre
+     * @param {Vector} centre
      * @param {bool} relative
      */
     Body.setCentre = function(body, centre, relative) {
@@ -478,7 +478,7 @@ var Axes = require('../geometry/Axes');
      * If `updateVelocity` is `true` then velocity is inferred from the change in position.
      * @method setPosition
      * @param {body} body
-     * @param {vector} position
+     * @param {Vector} position
      * @param {boolean} [updateVelocity=false]
      */
     Body.setPosition = function(body, position, updateVelocity) {
@@ -540,7 +540,7 @@ var Axes = require('../geometry/Axes');
      * Affects body speed.
      * @method setVelocity
      * @param {body} body
-     * @param {vector} velocity
+     * @param {Vector} velocity
      */
     Body.setVelocity = function(body, velocity) {
         var timeScale = body.deltaTime / Body._baseDelta;
@@ -555,7 +555,7 @@ var Axes = require('../geometry/Axes');
      * Gets the current linear velocity of the body.
      * @method getVelocity
      * @param {body} body
-     * @return {vector} velocity
+     * @return {Vector} velocity
      */
     Body.getVelocity = function(body) {
         var timeScale = Body._baseDelta / body.deltaTime;
@@ -639,7 +639,7 @@ var Axes = require('../geometry/Axes');
      * If `updateVelocity` is `true` then velocity is inferred from the change in position.
      * @method translate
      * @param {body} body
-     * @param {vector} translation
+     * @param {Vector} translation
      * @param {boolean} [updateVelocity=false]
      */
     Body.translate = function(body, translation, updateVelocity) {
@@ -652,7 +652,7 @@ var Axes = require('../geometry/Axes');
      * @method rotate
      * @param {body} body
      * @param {number} rotation
-     * @param {vector} [point]
+     * @param {Vector} [point]
      * @param {boolean} [updateVelocity=false]
      */
     Body.rotate = function(body, rotation, point, updateVelocity) {
@@ -679,7 +679,7 @@ var Axes = require('../geometry/Axes');
      * @param {body} body
      * @param {number} scaleX
      * @param {number} scaleY
-     * @param {vector} [point]
+     * @param {Vector} [point]
      */
     Body.scale = function(body, scaleX, scaleY, point) {
         var totalArea = 0,
@@ -826,8 +826,8 @@ var Axes = require('../geometry/Axes');
      * The `body` will take time to accelerate under a force, the resulting effect depends on duration of the force, the body mass and other forces on the body including friction combined.
      * @method applyForce
      * @param {body} body
-     * @param {vector} position The force origin in world-space. Pass `body.position` to avoid angular torque.
-     * @param {vector} force
+     * @param {Vector} position The force origin in world-space. Pass `body.position` to avoid angular torque.
+     * @param {Vector} force
      */
     Body.applyForce = function(body, position, force) {
         var offset = { x: position.x - body.position.x, y: position.y - body.position.y };

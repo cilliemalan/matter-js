@@ -231,7 +231,7 @@ var Mouse = require('../core/Mouse');
      * @method lookAt
      * @param {render} render
      * @param {object[]} objects
-     * @param {vector} [padding]
+     * @param {Vector} [padding]
      * @param {bool} [center=true]
      */
     Render.lookAt = function(render, objects, padding, center) {

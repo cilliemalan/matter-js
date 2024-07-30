@@ -280,7 +280,7 @@ var Body = require('../body/Body');
      * @method _bodiesApplyGravity
      * @private
      * @param {body[]} bodies
-     * @param {vector} gravity
+     * @param {Vector} gravity
      */
     Engine._bodiesApplyGravity = function(bodies, gravity) {
         var gravityScale = typeof gravity.scale !== 'undefined' ? gravity.scale : 0.001,

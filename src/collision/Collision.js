@@ -244,7 +244,7 @@ var Pair = require('./Pair');
      * @private
      * @param {body} bodyA
      * @param {body} bodyB
-     * @param {vector} normal
+     * @param {Vector} normal
      * @param {number} direction
      * @return [vector]
      */

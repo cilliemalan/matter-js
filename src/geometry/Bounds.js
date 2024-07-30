@@ -33,7 +33,7 @@ module.exports = Bounds;
      * @method update
      * @param {bounds} bounds
      * @param {vertices} vertices
-     * @param {vector} velocity
+     * @param {Vector} velocity
      */
     Bounds.update = function(bounds, vertices, velocity) {
         bounds.min.x = Infinity;
@@ -68,7 +68,7 @@ module.exports = Bounds;
      * Returns true if the bounds contains the given point.
      * @method contains
      * @param {bounds} bounds
-     * @param {vector} point
+     * @param {Vector} point
      * @return {boolean} True if the bounds contain the point, otherwise false
      */
     Bounds.contains = function(bounds, point) {
@@ -92,7 +92,7 @@ module.exports = Bounds;
      * Translates the bounds by the given vector.
      * @method translate
      * @param {bounds} bounds
-     * @param {vector} vector
+     * @param {Vector} vector
      */
     Bounds.translate = function(bounds, vector) {
         bounds.min.x += vector.x;
@@ -105,7 +105,7 @@ module.exports = Bounds;
      * Shifts the bounds to the given position.
      * @method shift
      * @param {bounds} bounds
-     * @param {vector} position
+     * @param {Vector} position
      */
     Bounds.shift = function(bounds, position) {
         var deltaX = bounds.max.x - bounds.min.x,

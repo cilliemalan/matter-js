@@ -77,7 +77,7 @@ var Common = require('../core/Common');
      * Returns the centre (centroid) of the set of vertices.
      * @method centre
      * @param {vertices} vertices
-     * @return {vector} The centre point
+     * @return {Vector} The centre point
      */
     Vertices.centre = function(vertices) {
         var area = Vertices.area(vertices, true),
@@ -100,7 +100,7 @@ var Common = require('../core/Common');
      * Returns the average (mean) of the set of vertices.
      * @method mean
      * @param {vertices} vertices
-     * @return {vector} The average point
+     * @return {Vector} The average point
      */
     Vertices.mean = function(vertices) {
         var average = { x: 0, y: 0 };
@@ -165,7 +165,7 @@ var Common = require('../core/Common');
      * Translates the set of vertices in-place.
      * @method translate
      * @param {vertices} vertices
-     * @param {vector} vector
+     * @param {Vector} vector
      * @param {number} scalar
      */
     Vertices.translate = function(vertices, vector, scalar) {
@@ -189,7 +189,7 @@ var Common = require('../core/Common');
      * @method rotate
      * @param {vertices} vertices
      * @param {number} angle
-     * @param {vector} point
+     * @param {Vector} point
      */
     Vertices.rotate = function(vertices, angle, point) {
         if (angle === 0)
@@ -220,7 +220,7 @@ var Common = require('../core/Common');
      * Returns `true` if the `point` is inside the set of `vertices`.
      * @method contains
      * @param {vertices} vertices
-     * @param {vector} point
+     * @param {Vector} point
      * @return {boolean} True if the vertices contains point, otherwise false
      */
     Vertices.contains = function(vertices, point) {
@@ -250,7 +250,7 @@ var Common = require('../core/Common');
      * @param {vertices} vertices
      * @param {number} scaleX
      * @param {number} scaleY
-     * @param {vector} point
+     * @param {Vector} point
      */
     Vertices.scale = function(vertices, scaleX, scaleY, point) {
         if (scaleX === 1 && scaleY === 1)

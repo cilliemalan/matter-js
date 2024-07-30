@@ -502,7 +502,7 @@ var Body = require('./Body');
      * without imparting any velocity.
      * @method translate
      * @param {composite} composite
-     * @param {vector} translation
+     * @param {Vector} translation
      * @param {bool} [recursive=true]
      */
     Composite.translate = function(composite, translation, recursive) {
@@ -520,7 +520,7 @@ var Body = require('./Body');
      * @method rotate
      * @param {composite} composite
      * @param {number} rotation
-     * @param {vector} point
+     * @param {Vector} point
      * @param {bool} [recursive=true]
      */
     Composite.rotate = function(composite, rotation, point, recursive) {
@@ -550,7 +550,7 @@ var Body = require('./Body');
      * @param {composite} composite
      * @param {number} scaleX
      * @param {number} scaleY
-     * @param {vector} point
+     * @param {Vector} point
      * @param {bool} [recursive=true]
      */
     Composite.scale = function(composite, scaleX, scaleY, point, recursive) {

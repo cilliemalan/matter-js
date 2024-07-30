@@ -309,7 +309,7 @@ var Common = require('../core/Common');
      * Returns the world-space position of `constraint.pointA`, accounting for `constraint.bodyA`.
      * @method pointAWorld
      * @param {constraint} constraint
-     * @returns {vector} the world-space position
+     * @returns {Vector} the world-space position
      */
     Constraint.pointAWorld = function(constraint) {
         return {
@@ -324,7 +324,7 @@ var Common = require('../core/Common');
      * Returns the world-space position of `constraint.pointB`, accounting for `constraint.bodyB`.
      * @method pointBWorld
      * @param {constraint} constraint
-     * @returns {vector} the world-space position
+     * @returns {Vector} the world-space position
      */
     Constraint.pointBWorld = function(constraint) {
         return {

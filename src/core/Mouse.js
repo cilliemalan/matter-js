@@ -145,7 +145,7 @@ var Common = require('../core/Common');
      * Sets the mouse position offset.
      * @method setOffset
      * @param {mouse} mouse
-     * @param {vector} offset
+     * @param {Vector} offset
      */
     Mouse.setOffset = function(mouse, offset) {
         mouse.offset.x = offset.x;
@@ -158,7 +158,7 @@ var Common = require('../core/Common');
      * Sets the mouse position scale.
      * @method setScale
      * @param {mouse} mouse
-     * @param {vector} scale
+     * @param {Vector} scale
      */
     Mouse.setScale = function(mouse, scale) {
         mouse.scale.x = scale.x;
