@@ -1,4 +1,5 @@
 import type { Body } from '../body/Body'
+import { rectangle } from '../factory/Bodies';
 import { Bounds, overlaps, contains as boundsContains } from '../geometry/Bounds';
 import { angle, magnitude, sub, Vector } from '../geometry/Vector';
 import { contains as verticesContains } from '../geometry/Vertices';
@@ -47,7 +48,7 @@ export function ray(bodies: Body[], startPoint: Vector, endPoint: Vector, rayWid
         rayLength = magnitude(sub(startPoint, endPoint)),
         rayX = (endPoint.x + startPoint.x) * 0.5,
         rayY = (endPoint.y + startPoint.y) * 0.5,
-        ray = Bodies.rectangle(rayX, rayY, rayLength, rayWidth, { angle: rayAngle }),
+        ray = rectangle(rayX, rayY, rayLength, rayWidth, { angle: rayAngle }),
         collisions = collides(ray, bodies);
 
     for (var i = 0; i < collisions.length; i += 1) {
