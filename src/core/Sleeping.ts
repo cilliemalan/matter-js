@@ -1,6 +1,7 @@
 import { _baseDelta } from './Common'
 import { trigger } from './Events'
 import { Body, getSpeed, getAngularSpeed } from '../body/Body'
+import { Pair } from '../collision/Pair';
 
 export let _motionWakeThreshold = 0.18;
 export let _motionSleepThreshold = 0.08;
@@ -46,8 +47,6 @@ export function update(bodies: Body[], delta: number) {
 
 /**
  * Given a set of colliding pairs, wakes the sleeping bodies involved.
- * @method afterCollisions
- * @param {pair[]} pairs
  */
 export function afterCollisions(pairs: Pair[]) {
     var motionSleepThreshold = _motionSleepThreshold;
@@ -81,9 +80,6 @@ export function afterCollisions(pairs: Pair[]) {
 
 /**
  * Set a body as sleeping or awake.
- * @method set
- * @param {Body} body
- * @param {boolean} isSleeping
  */
 export function set(body: Body, isSleeping: boolean) {
     var wasSleeping = body.isSleeping;

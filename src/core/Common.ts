@@ -1,26 +1,33 @@
+import { Body } from "../body/Body";
+import { Composite } from "../body/Composite";
+import { Constraint } from "../constraint/Constraint";
 
 export let _baseDelta = 1000 / 60;
 let _nextId = 0;
 let _seed = 0;
 let _nowStartTime = +(new Date());
 let _warnedOnce = new Set<string>();
-let _decomp: any;
 
-export type ObjectType = "body" | "constraint" | "composite";
+export type ObjectType = "body" | "constraint" | "composite" | "mouseConstraint";
 export interface ObjectBase {
     type: ObjectType;
     label: string;
 }
 
+export interface BodyBase extends ObjectBase { type: "body" };
+export interface ConstraintBase extends ObjectBase { type: "constraint" };
+export interface CompositeBase extends ObjectBase { type: "composite" };
+export interface MouseConstraintBase extends ObjectBase { type: "mouseConstraint" };
+export type ChildObject = Body | Constraint | Composite | MouseConstraintBase;
+
 /**
  * Extends the object in the first argument using the object in the second argument.
- * @method extend
- * @param {} obj
- * @param {boolean} deep
- * @return {} obj extended
  */
-export function extend(obj: any, deep?: boolean, ...more: any[]) {
+export function extend<T, U extends Partial<T>>(obj: T, deep?: boolean, more?: U) : T & U;
+export function extend<T, U extends Partial<T>>(obj: T, more?: U) : T & U;
+export function extend<T>(obj: T, deep?: boolean, ...more: any[]): T {
     let argsStart, args, deepClone;
+    const o = obj as any;
 
     if (typeof deep === 'boolean') {
         argsStart = 2;
@@ -35,16 +42,15 @@ export function extend(obj: any, deep?: boolean, ...more: any[]) {
 
         if (source) {
             for (var prop in source) {
-                if (deepClone && source[prop] && source[prop].constructor === Object) {
-                    if (!obj[prop] || obj[prop].constructor === Object) {
-                        obj[prop] = obj[prop] || {};
-                        extend(obj[prop], deepClone, source[prop]);
-                    } else {
-                        obj[prop] = source[prop];
-                    }
-                } else {
-                    obj[prop] = source[prop];
+                const sval = source[prop];
+
+                if (typeof sval !== 'object' || sval.constructor !== Object || !deepClone) {
+                    o[prop] = source[prop];
+                    continue;
                 }
+
+                o[prop] ??= {};
+                extend(o[prop], true, sval);
             }
         }
     }
@@ -362,7 +368,7 @@ export function deprecated(obj: Record<string, Function>, prop: string, warning:
  * @return {Number} Unique sequential ID
  */
 export function nextId() {
-    return _nextId++;
+    return ++_nextId;
 };
 
 /**
@@ -522,34 +528,4 @@ export function chainPathAfter(base: object, path: string, func: Function) {
         get(base, path),
         func
     ));
-};
-
-/**
- * Provide the [poly-decomp](https://github.com/schteppe/poly-decomp.js) library module to enable
- * concave vertex decomposition support when using `Bodies.fromVertices` e.g. `setDecomp(require('poly-decomp'))`.
- * @method setDecomp
- * @param {} decomp The [poly-decomp](https://github.com/schteppe/poly-decomp.js) library module.
- */
-export function setDecomp(decomp: any) {
-    _decomp = decomp;
-};
-
-/**
- * Returns the [poly-decomp](https://github.com/schteppe/poly-decomp.js) library module provided through `setDecomp`,
- * otherwise returns the global `decomp` if set.
- * @method getDecomp
- * @return {} The [poly-decomp](https://github.com/schteppe/poly-decomp.js) library module if provided.
- */
-export function getDecomp() {
-    // get user provided decomp if set
-    var decomp = _decomp;
-
-    try {
-        decomp = (globalThis as any).decomp;
-    } catch (e) {
-        // decomp not available
-        decomp = null;
-    }
-
-    return decomp;
 };

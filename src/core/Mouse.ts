@@ -90,9 +90,6 @@ export class Mouse {
 }
 /**
  * Creates a mouse input.
- * @method create
- * @param {HTMLElement} element
- * @return {mouse} A new mouse
  */
 export function create(element: HTMLElement) {
 

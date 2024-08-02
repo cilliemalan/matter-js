@@ -33,7 +33,7 @@ export interface Vertex extends Vector {
  *
  */
 export function create(points: Vector[], body: Body): Vertex[] {
-    var vertices = [];
+    var vertices: Vertex[] = [];
 
     for (var i = 0; i < points.length; i++) {
         var point = points[i],

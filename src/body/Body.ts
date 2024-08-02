@@ -1,4 +1,4 @@
-import { nextId, choose, sign, _baseDelta, ObjectBase } from "../core/Common";
+import { nextId, choose, sign, _baseDelta, BodyBase, extend } from "../core/Common";
 import { Vector, VectorAngle, add, create as cv, div, magnitude, mult, normalise, rotateAbout, rotate as rotateVector, sub } from "../geometry/Vector";
 import { Vertex, rotate as rotateVertices, create as createVertices, area, centre, translate as translateVertices, inertia, clockwiseSort, hull, scale as scaleVertices } from "../geometry/Vertices";
 import { Bounds, create as createBounds, update as updateBounds } from "../geometry/Bounds";
@@ -18,16 +18,33 @@ export interface SpriteInformation {
     yOffset: number;
 }
 
+export type RenderType = "line" | "pin" | "spring";
+
 export interface RenderOptions {
-    visible: boolean;
-    opacity: number;
+    /** A flag that indicates if the thing should be rendered. */
+    visible?: boolean;
+    opacity?: number;
+    /**
+     * A `String` that defines the stroke style to use when rendering the outline.
+     * It is the same as when using a canvas, so it accepts CSS style property values.
+     */
     strokeStyle: unknown;
-    fillStyle: unknown;
+    fillStyle?: unknown;
+    /**
+     * A `Number` that defines the line width to use when rendering the outline.
+     * A value of `0` means no outline will be rendered.
+     */
     lineWidth: unknown;
-    sprite: SpriteInformation;
+    sprite?: SpriteInformation;
+    /**
+     * A `String` that defines the rendering type. 
+     * The possible values are 'line', 'pin', 'spring'.
+     * An appropriate render type will be automatically chosen unless one is given in options.
+     */
+    type?: RenderType;
 }
 
-export interface BodyBase {
+export interface PartialBody {
     restitution: number;
     friction: number;
     mass: number;
@@ -37,13 +54,9 @@ export interface BodyBase {
     density: number;
 }
 
-export interface Body extends BodyBase, ObjectBase {
+export interface Body extends PartialBody, BodyBase {
     /** The id for this body*/
     id: number;
-    /** The type of thing this is */
-    type: "body";
-    /** The label for the type of thing this is */
-    label: "Body";
     /** 
      * _Read only_. Use `Body.setParts` to set. 
      * 
@@ -88,7 +101,7 @@ export interface Body extends BodyBase, ObjectBase {
      * Many other body properties are automatically calculated from these vertices when set including `density`, `area` and `inertia`.
      * 
      * The module `Matter.Vertices` contains useful methods for working with vertices. */
-    vertices: Vector[];
+    vertices: Vertex[];
     position: Vector;
     force: Vector;
     torque: number;
@@ -117,11 +130,11 @@ export interface Body extends BodyBase, ObjectBase {
     circleRadius?: number,
     positionPrev: Vector,
     anglePrev: number,
-    parent?: Body,
+    parent: Body,
     axes: Vector[],
     area: number;
     deltaTime: number;
-    _original?: BodyBase;
+    _original?: PartialBody;
 }
 
 let _timeCorrection = true;
@@ -130,87 +143,83 @@ let _nextCollidingGroupId = 1;
 let _nextNonCollidingGroupId = -1;
 let _nextCategory = 0x0001;
 
-const defaults: Body = {
-    id: nextId(),
-    type: 'body',
-    label: 'Body',
-    parts: [],
-    angle: 0,
-    vertices: [cv(0, 0), cv(40, 0), cv(40, 40), cv(0, 40)],
-    position: { x: 0, y: 0 },
-    force: { x: 0, y: 0 },
-    torque: 0,
-    positionImpulse: { x: 0, y: 0 },
-    constraintImpulse: { x: 0, y: 0, angle: 0 },
-    totalContacts: 0,
-    speed: 0,
-    angularSpeed: 0,
-    velocity: { x: 0, y: 0 },
-    angularVelocity: 0,
-    isSensor: false,
-    isStatic: false,
-    isSleeping: false,
-    sleepCounter: 0,
-    motion: 0,
-    sleepThreshold: 60,
-    density: 0.001,
-    restitution: 0,
-    friction: 0.1,
-    frictionStatic: 0.5,
-    frictionAir: 0.01,
-    collisionFilter: {
-        category: 0x0001,
-        mask: 0xFFFFFFFF,
-        group: 0
-    },
-    slop: 0.05,
-    timeScale: 1,
-    render: {
-        visible: true,
-        opacity: 1,
-        strokeStyle: undefined,
-        fillStyle: undefined,
-        lineWidth: undefined,
-        sprite: {
-            xScale: 1,
-            yScale: 1,
-            xOffset: 0,
-            yOffset: 0
-        }
-    },
-    events: undefined,
-    bounds: { min: { x: 0, y: 0 }, max: { x: 40, y: 40 } },
-    chamfer: undefined,
-    circleRadius: 0,
-    positionPrev: { x: 0, y: 0 },
-    anglePrev: 0,
-    parent: undefined,
-    axes: [],
-    area: 0,
-    mass: 0,
-    inverseMass: 0,
-    inertia: 0,
-    inverseInertia: 0,
-    deltaTime: 1000 / 60,
-    _original: undefined,
-};
-
 /**
  * Creates a new rigid body model. The options parameter is an object that specifies any properties you wish to override the defaults.
  * All properties have default values, and many are pre-calculated automatically based on other properties.
  * Vertices must be specified in clockwise order.
  * See the properties section below for detailed information on what you can pass via the `options` object.
- * @method create
- * @param {} options
- * @return {body} body
  */
 
-export function create(base?: Partial<Body>) {
+export function create(options?: Partial<Body>) {
 
-    const body = { ...defaults, ...base };
-
-    _initProperties(body, base);
-
+    const body: Body = {
+        id: nextId(),
+        type: 'body',
+        label: 'Body',
+        parts: [],
+        angle: 0,
+        vertices: [{ x: 0, y: 0 }, { x: 40, y: 0 }, { x: 40, y: 40 }, { x: 0, y: 40 }] as unknown as Vertex[],
+        position: { x: 0, y: 0 },
+        force: { x: 0, y: 0 },
+        torque: 0,
+        positionImpulse: { x: 0, y: 0 },
+        constraintImpulse: { x: 0, y: 0, angle: 0 },
+        totalContacts: 0,
+        speed: 0,
+        angularSpeed: 0,
+        velocity: { x: 0, y: 0 },
+        angularVelocity: 0,
+        isSensor: false,
+        isStatic: false,
+        isSleeping: false,
+        sleepCounter: 0,
+        motion: 0,
+        sleepThreshold: 60,
+        density: 0.001,
+        restitution: 0,
+        friction: 0.1,
+        frictionStatic: 0.5,
+        frictionAir: 0.01,
+        collisionFilter: {
+            category: 0x0001,
+            mask: 0xFFFFFFFF,
+            group: 0
+        },
+        slop: 0.05,
+        timeScale: 1,
+        render: {
+            visible: true,
+            opacity: 1,
+            strokeStyle: undefined,
+            fillStyle: undefined,
+            lineWidth: undefined,
+            sprite: {
+                xScale: 1,
+                yScale: 1,
+                xOffset: 0,
+                yOffset: 0
+            }
+        },
+        events: undefined,
+        bounds: { min: { x: 0, y: 0 }, max: { x: 40, y: 40 } },
+        chamfer: undefined,
+        circleRadius: 0,
+        positionPrev: { x: 0, y: 0 },
+        anglePrev: 0,
+        parent: undefined as unknown as Body,
+        axes: [],
+        area: 0,
+        mass: 0,
+        inverseMass: 0,
+        inertia: 0,
+        inverseInertia: 0,
+        deltaTime: 1000 / 60,
+        _original: undefined,
+    };
+    
+    body.parent = body;
+    extend(body, options);
+    _initProperties(body, options);
     return body;
 };
 
@@ -273,6 +282,7 @@ function _initProperties(body: Body, options?: Partial<Body>) {
     body.render.fillStyle = body.render.fillStyle || defaultFillStyle;
     body.render.strokeStyle = body.render.strokeStyle || defaultStrokeStyle;
     body.render.lineWidth = body.render.lineWidth || defaultLineWidth;
+    body.render.sprite ??= { xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
     body.render.sprite.xOffset += -(body.bounds.min.x - body.position.x) / (body.bounds.max.x - body.bounds.min.x);
     body.render.sprite.yOffset += -(body.bounds.min.y - body.position.y) / (body.bounds.max.y - body.bounds.min.y);
 };
@@ -280,10 +290,6 @@ function _initProperties(body: Body, options?: Partial<Body>) {
 /**
  * Given a property and a value (or map of), sets the property(s) on the body, using the appropriate setter functions if they exist.
  * Prefer to use the actual setter functions in performance critical situations.
- * @method set
- * @param {body} body
- * @param {} settings A property name (or map of properties and values) to set on the body.
- * @param {} value The value to set if `settings` is a single property name.
  */
 export function set(body: Body, settings: Partial<Body>): void;
 export function set(body: Body, setting: keyof Body, value: any): void;
@@ -300,50 +306,50 @@ export function set(body: Body, settings: keyof Body | Partial<Body>, value?: an
         }
 
         value = settings[property];
-        switch (property) {
+        switch (property as string) {
 
-            // case 'isStatic':
-            //     Body.setStatic(body, value);
-            //     break;
-            // case 'isSleeping':
-            //     setSleeping(body, value);
-            //     break;
-            // case 'mass':
-            //     Body.setMass(body, value);
-            //     break;
-            // case 'density':
-            //     Body.setDensity(body, value);
-            //     break;
-            // case 'inertia':
-            //     Body.setInertia(body, value);
-            //     break;
-            // case 'vertices':
-            //     Body.setVertices(body, value);
-            //     break;
-            // case 'position':
-            //     Body.setPosition(body, value);
-            //     break;
-            // case 'angle':
-            //     Body.setAngle(body, value);
-            //     break;
-            // case 'velocity':
-            //     Body.setVelocity(body, value);
-            //     break;
-            // case 'angularVelocity':
-            //     Body.setAngularVelocity(body, value);
-            //     break;
-            // case 'speed':
-            //     Body.setSpeed(body, value);
-            //     break;
-            // case 'angularSpeed':
-            //     Body.setAngularSpeed(body, value);
-            //     break;
-            // case 'parts':
-            //     Body.setParts(body, value);
-            //     break;
-            // case 'centre':
-            //     Body.setCentre(body, value);
-            //     break;
+            case 'isStatic':
+                setStatic(body, value);
+                break;
+            case 'isSleeping':
+                setSleeping(body, value);
+                break;
+            case 'mass':
+                setMass(body, value);
+                break;
+            case 'density':
+                setDensity(body, value);
+                break;
+            case 'inertia':
+                setInertia(body, value);
+                break;
+            case 'vertices':
+                setVertices(body, value);
+                break;
+            case 'position':
+                setPosition(body, value);
+                break;
+            case 'angle':
+                setAngle(body, value);
+                break;
+            case 'velocity':
+                setVelocity(body, value);
+                break;
+            case 'angularVelocity':
+                setAngularVelocity(body, value);
+                break;
+            case 'speed':
+                setSpeed(body, value);
+                break;
+            case 'angularSpeed':
+                setAngularSpeed(body, value);
+                break;
+            case 'parts':
+                setParts(body, value);
+                break;
+            case 'centre':
+                setCentre(body, value);
+                break;
             default:
                 (body[property] as any) = value;
 
@@ -442,7 +448,7 @@ export function setVertices(body: Body, vertices: Vertex[]): void;
 export function setVertices(body: Body, vertices: Vertex[] | Vector[]): void {
     // change vertices
     if ((vertices as Vertex[])[0].body === body) {
-        body.vertices = vertices;
+        body.vertices = vertices as Vertex[];
     } else {
         body.vertices = createVertices(vertices, body);
     }
