@@ -28,13 +28,13 @@ export interface RenderOptions {
      * A `String` that defines the stroke style to use when rendering the outline.
      * It is the same as when using a canvas, so it accepts CSS style property values.
      */
-    strokeStyle: unknown;
+    strokeStyle?: string;
     fillStyle?: unknown;
     /**
      * A `Number` that defines the line width to use when rendering the outline.
      * A value of `0` means no outline will be rendered.
      */
-    lineWidth: unknown;
+    lineWidth?: number | string;
     sprite?: SpriteInformation;
     /**
      * A `String` that defines the rendering type. 
