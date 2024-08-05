@@ -18,3 +18,5 @@ test/node/refs
 __snapshots__
 __compare__
 *.d.ts
+lib/
+dist/

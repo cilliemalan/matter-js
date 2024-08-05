@@ -19,7 +19,9 @@
     "game engine",
     "rigid body physics"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "tsup"
+  },
   "files": [
     "src",
     "build/matter.js",
