@@ -1,7 +1,7 @@
 import { Body, CollisionFilter } from "./Body";
 import { allBodies } from "./Composite";
 import { canCollide } from "./Detector";
-import { extend, ObjectBase, warn } from "./Common";
+import { extend, MouseConstraintBase, warn } from "./Common";
 import { Engine } from "./Engine";
 import { on, trigger } from "./Events";
 import { clearSourceEvents, Mouse, create as mouseCreate } from "./Mouse";
@@ -10,7 +10,7 @@ import { Constraint, create as constraintCreate } from "./Constraint";
 import { contains as verticesContains } from "./Vertices";
 import { set as sleepingSet } from "./Sleeping";
 
-export interface MouseConstraint extends ObjectBase {
+export interface MouseConstraint extends MouseConstraintBase {
     /** The `Mouse` instance in use. If not supplied in `MouseConstraint.create`, one will be created. */
     mouse: Mouse;
     /** The `Body` that is currently being moved by the user, or `null` if no body. */
@@ -39,7 +39,7 @@ export interface EngineWithMouse extends Engine {
  * All properties have default values, and many are pre-calculated automatically based on other properties.
  * See the properties section below for detailed information on what you can pass via the `options` object.
  */
-export function create(engine: EngineWithMouse, options: MouseOptions): MouseConstraint {
+export function create(engine: EngineWithMouse, options?: Partial<MouseOptions>): MouseConstraint {
     var mouse = (engine ? engine.mouse : null) || (options ? options.mouse : null);
 
     if (!mouse) {

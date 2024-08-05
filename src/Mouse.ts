@@ -5,6 +5,10 @@ export class Mouse {
 
     constructor(element: HTMLElement) {
         this.element = element;
+        this.mousemove = this.mousemove.bind(this);
+        this.mousedown = this.mousedown.bind(this);
+        this.mouseup = this.mouseup.bind(this);
+        this.mousewheel = this.mousewheel.bind(this);
         setElement(this, element);
         this.pixelRatio = parseInt(element.getAttribute('data-pixel-ratio') ?? "1", 10) || 1;
     }

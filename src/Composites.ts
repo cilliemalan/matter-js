@@ -1,4 +1,4 @@
-import { Body, create as bodyCreate, translate as bodyTranslate, nextGroup as bodyNextGroup } from "./Body";
+import { Body, translate as bodyTranslate, nextGroup as bodyNextGroup } from "./Body";
 import { circle as bodiesCircle, rectangle as bodiesRectangle } from "./Bodies";
 import { create as compositeCreate, addBody, Composite, addConstraint } from "./Composite";
 import { Constraint, create as constraintCreate } from "./Constraint";
@@ -128,7 +128,7 @@ export function mesh(composite: Composite, columns: number, rows: number, crossB
  * This function uses the body's bounds to prevent overlaps.
  */
 export function pyramid(x: number, y: number, columns: number, rows: number, columnGap: number, rowGap: number, callback: CreateBodyCallback) {
-    return stack(x, y, columns, rows, columnGap, rowGap, function (stackX, stackY, column, row, lastBody, i) {
+    return stack(x, y, columns, rows, columnGap, rowGap, function (_stackX, stackY, column, row, lastBody, i) {
         let actualRows = Math.min(rows, Math.ceil(columns / 2));
         let lastBodyWidth = lastBody ? lastBody.bounds.max.x - lastBody.bounds.min.x : 0;
 

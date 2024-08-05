@@ -1,7 +1,6 @@
 import type { Body } from './Body';
 import type { Contact } from './Contact';
 import type { Collision } from './Collision';
-import { create as createContact } from './Contact';
 
 export interface Pair {
     id: string;
@@ -34,7 +33,7 @@ export function create(collision: Collision, timestamp: number) {
         bodyA: bodyA,
         bodyB: bodyB,
         collision: collision,
-        contacts: new Array<Contact>(2) as [Contact, Contact],
+        contacts: [{ normalImpulse: 0, tangentImpulse: 0 }, { normalImpulse: 0, tangentImpulse: 0 }] as [Contact, Contact],
         contactCount: 0,
         separation: 0,
         isActive: true,

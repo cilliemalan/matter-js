@@ -1,5 +1,4 @@
 import type { Vector } from "./Vector";
-import type { Vertex } from "./Vertices";
 
 export interface Contact {
     vertex: Vector;

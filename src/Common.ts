@@ -1,11 +1,11 @@
 import { Body } from "./Body";
 import { Composite } from "./Composite";
 import { Constraint } from "./Constraint";
+import { MouseConstraint } from "./MouseConstraint";
 
 export let _baseDelta = 1000 / 60;
 let _nextId = 0;
 let _seed = 0;
-let _nowStartTime = +(new Date());
 let _warnedOnce = new Set<string>();
 
 export type ObjectType = "body" | "constraint" | "composite" | "mouseConstraint";
@@ -18,15 +18,15 @@ export interface BodyBase extends ObjectBase { type: "body" };
 export interface ConstraintBase extends ObjectBase { type: "constraint" };
 export interface CompositeBase extends ObjectBase { type: "composite" };
 export interface MouseConstraintBase extends ObjectBase { type: "mouseConstraint" };
-export type ChildObject = Body | Constraint | Composite | MouseConstraintBase;
+export type ChildObject = Body | Constraint | Composite | MouseConstraint;
 
 /**
  * Extends the object in the first argument using the object in the second argument.
  */
 export function extend<T, U extends Partial<T>>(obj: T, deep?: boolean, more?: U) : T & U;
 export function extend<T, U extends Partial<T>>(obj: T, more?: U) : T & U;
-export function extend<T>(obj: T, deep?: boolean, ...more: any[]): T {
-    let argsStart, args, deepClone;
+export function extend<T>(obj: T, deep?: boolean): T {
+    let argsStart, deepClone;
     const o = obj as any;
 
     if (typeof deep === 'boolean') {
@@ -305,7 +305,7 @@ let logLevel = 1;
  */
 export function log(...args: any[]) {
     if (console && logLevel > 0 && logLevel <= 3) {
-        console.log.apply(console, ['matter-js:'].concat(Array.prototype.slice.call(arguments)));
+        console.log.apply(console, ['matter-js:'].concat(Array.prototype.slice.call(args)));
     }
 };
 
@@ -317,7 +317,7 @@ export function log(...args: any[]) {
  */
 export function info(...args: any[]) {
     if (console && logLevel > 0 && logLevel <= 2) {
-        console.info.apply(console, ['matter-js:'].concat(Array.prototype.slice.call(arguments)));
+        console.info.apply(console, ['matter-js:'].concat(Array.prototype.slice.call(args)));
     }
 };
 
@@ -329,7 +329,7 @@ export function info(...args: any[]) {
  */
 export function warn(...args: any[]) {
     if (console && logLevel > 0 && logLevel <= 3) {
-        console.warn.apply(console, ['matter-js:'].concat(Array.prototype.slice.call(arguments)));
+        console.warn.apply(console, ['matter-js:'].concat(Array.prototype.slice.call(args)));
     }
 };
 
@@ -339,7 +339,7 @@ export function warn(...args: any[]) {
  * @param ...objs {} The objects to log.
  */
 export function warnOnce(...args: any[]) {
-    var message = Array.prototype.slice.call(arguments).join(' ');
+    var message = Array.prototype.slice.call(args).join(' ');
 
     if (!_warnedOnce.has(message)) {
         warn(message);
@@ -462,8 +462,8 @@ export function _topologicalSort(node: any, visited: any, temp: any, graph: any,
 export function chain(...args: Function[]) {
     var funcs: Function[] = [];
 
-    for (var i = 0; i < arguments.length; i += 1) {
-        var func = arguments[i];
+    for (var i = 0; i < args.length; i += 1) {
+        var func: any = args[i];
 
         if (func._chained) {
             // flatten already chained functions
@@ -475,15 +475,15 @@ export function chain(...args: Function[]) {
 
     var chain = function () {
         // https://github.com/GoogleChrome/devtools-docs/issues/53#issuecomment-51941358
-        var lastResult,
-            args = new Array(arguments.length);
+        let lastResult;
+        let args0: any[] = new Array(args.length);
 
-        for (var i = 0, l = arguments.length; i < l; i++) {
-            args[i] = arguments[i];
+        for (var i = 0, l = args0.length; i < l; i++) {
+            args0[i] = args[i];
         }
 
         for (i = 0; i < funcs.length; i += 1) {
-            var result = funcs[i].apply(lastResult, args);
+            var result = funcs[i].apply(lastResult, args0);
 
             if (typeof result !== 'undefined') {
                 lastResult = result;

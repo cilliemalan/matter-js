@@ -2,7 +2,6 @@ import {
     Composite,
     create as createComposite,
     allBodies as compositeAllBodies,
-    allComposites as compositeAllComposites,
     allConstraints as compositeAllConstraints,
     setModified as compositeSetModified
 } from "./Composite";
@@ -87,7 +86,7 @@ const _deltaMax = 1000 / 60;
  * @param {object} [options]
  * @return {engine} engine
  */
-export function create(options: Partial<Engine>): Engine {
+export function create(options?: Partial<Engine>): Engine {
 
     var engine = {
         positionIterations: 6,

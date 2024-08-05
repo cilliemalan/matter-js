@@ -1,4 +1,4 @@
-import { Constraint, ConstraintRenderOptions } from './Constraint';
+import { Constraint } from './Constraint';
 import { ChildObject, CompositeBase, extend, indexOf, nextId, ObjectType, warn } from './Common'
 import { trigger } from './Events';
 import { type Body, translate as bodyTranslate, setPosition as bodySetPosition, rotate as bodyRotate, scale as bodyScale } from './Body';
@@ -339,7 +339,7 @@ export function allBodies(composite: Composite): Body[] {
     var bodies = [...composite.bodies];
 
     for (var i = 0; i < composite.composites.length; i++) {
-        bodies = [...allBodies(composite.composites[i])]
+        bodies.push(...allBodies(composite.composites[i]));
     }
 
     if (composite.cache) {
@@ -393,8 +393,7 @@ export function allComposites(composite: Composite): Composite[] {
  * Searches the composite recursively for an object matching the type and id supplied, null if not found.
  */
 export function get(composite: Composite, id: number, type: ObjectType) {
-    var objects,
-        object;
+    var objects;
 
     switch (type) {
         case 'body':

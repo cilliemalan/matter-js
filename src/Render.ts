@@ -17,7 +17,6 @@ import { trigger } from "./Events";
 import { Constraint } from "./Constraint";
 import { Body, getVelocity as bodyGetVelocity } from "./Body";
 import { Pair } from "./Pair";
-import { Vertex } from "./Vertices";
 
 export interface Render {
     /** A reference to the `Matter.Engine` instance to be used. */
@@ -356,7 +355,7 @@ export function setSize(render: Render, width: number, height: number) {
     }
 };
 
-declare type LookAtParm = { bounds: Bounds } | { position: Vector } | { min: number, max: number } | { x: number, y: number };
+export type LookAtParm = { bounds: Bounds } | { position: Vector } | { min: Vector, max: Vector } | { x: number, y: number };
 /**
  * Positions and sizes the viewport around the given object bounds.
  * Objects must have at least one of the following properties:
@@ -483,7 +482,7 @@ export function endViewTransform(render: Render) {
  * @method world
  * @param {render} render
  */
-export function world(render: Render, time: DOMHighResTimeStamp) {
+export function world(render: Render, _time: DOMHighResTimeStamp) {
     let startTime = globalThis.performance.now();
     let engine = render.engine;
     let world = engine.world;
@@ -518,7 +517,7 @@ export function world(render: Render, time: DOMHighResTimeStamp) {
     // handle bounds
     if (options.hasBounds) {
         // filter out bodies that are not in view
-        for (i = 0; i < allBodies.length; i++) {
+        for (i = 0; i < _bodies.length; i++) {
             var body = _bodies[i];
             if (boundsOverlaps(body.bounds, render.bounds)) {
                 bodies.push(body);
@@ -619,7 +618,7 @@ export function world(render: Render, time: DOMHighResTimeStamp) {
 /**
  * Renders statistics about the engine and world useful for debugging.
  */
-export function stats(render: Render, context: CanvasRenderingContext2D, time: number) {
+export function stats(render: Render, context: CanvasRenderingContext2D, _time: number) {
     let engine = render.engine;
     let world = engine.world;
     let bodies = allBodies(world);
@@ -858,7 +857,6 @@ function renderConstraints(constraints: Constraint[], context: CanvasRenderingCo
 
 function renderBodies(render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
     let c = context;
-    let engine = render.engine;
     let options = render.options;
     let showInternalEdges = options.showInternalEdges || !options.wireframes;
     let body;
@@ -1003,13 +1001,11 @@ function bodyWireframes(render: Render, bodies: Body[], context: CanvasRendering
 /**
  * Optimised method for drawing body convex hull wireframes in one pass
  */
-function bodyConvexHulls(render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
+function bodyConvexHulls(_render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
     var c = context,
         body,
-        part,
         i,
-        j,
-        k;
+        j;
 
     c.beginPath();
 
@@ -1037,7 +1033,7 @@ function bodyConvexHulls(render: Render, bodies: Body[], context: CanvasRenderin
 /**
  * Renders body vertex numbers.
  */
-function vertexNumbers(render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
+function vertexNumbers(_render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
     var c = context,
         i,
         j,
@@ -1058,7 +1054,7 @@ function vertexNumbers(render: Render, bodies: Body[], context: CanvasRenderingC
 /**
  * Renders mouse position.
  */
-function mousePosition(render: Render, mouse: Mouse, context: CanvasRenderingContext2D) {
+function mousePosition(_render: Render, mouse: Mouse, context: CanvasRenderingContext2D) {
     var c = context;
     c.fillStyle = 'rgba(255,255,255,0.8)';
     c.fillText(mouse.position.x + '  ' + mouse.position.y, mouse.position.x + 5, mouse.position.y - 5);
@@ -1069,7 +1065,6 @@ function mousePosition(render: Render, mouse: Mouse, context: CanvasRenderingCon
  */
 function bodyBounds(render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
     var c = context,
-        engine = render.engine,
         options = render.options;
 
     c.beginPath();
@@ -1101,7 +1096,6 @@ function bodyBounds(render: Render, bodies: Body[], context: CanvasRenderingCont
  */
 function bodyAxes(render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
     var c = context,
-        engine = render.engine,
         options = render.options,
         part,
         i,
@@ -1158,7 +1152,6 @@ function bodyAxes(render: Render, bodies: Body[], context: CanvasRenderingContex
  */
 function bodyPositions(render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
     var c = context,
-        engine = render.engine,
         options = render.options,
         body,
         part,
@@ -1207,7 +1200,7 @@ function bodyPositions(render: Render, bodies: Body[], context: CanvasRenderingC
 /**
  * Draws body velocity
  */
-function bodyVelocity(render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
+function bodyVelocity(_render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
     var c = context;
 
     c.beginPath();
@@ -1232,7 +1225,7 @@ function bodyVelocity(render: Render, bodies: Body[], context: CanvasRenderingCo
 /**
  * Draws body ids
  */
-function bodyIds(render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
+function bodyIds(_render: Render, bodies: Body[], context: CanvasRenderingContext2D) {
     let c = context;
     let i;
     let j;
@@ -1256,9 +1249,6 @@ function collisions(render: Render, pairs: Pair[], context: CanvasRenderingConte
         options = render.options,
         pair,
         collision,
-        corrected,
-        bodyA,
-        bodyB,
         i,
         j;
 
@@ -1331,11 +1321,9 @@ function separations(render: Render, pairs: Pair[], context: CanvasRenderingCont
         options = render.options,
         pair,
         collision,
-        corrected,
         bodyA,
         bodyB,
-        i,
-        j;
+        i;
 
     c.beginPath();
 
@@ -1377,10 +1365,6 @@ function separations(render: Render, pairs: Pair[], context: CanvasRenderingCont
 
 /**
  * Updates render timing.
- * @method _updateTiming
- * @private
- * @param {render} render
- * @param {number} time
  */
 var _updateTiming = function (render: Render, time: number) {
     var engine = render.engine,
