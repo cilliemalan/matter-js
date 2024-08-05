@@ -1,8 +1,8 @@
-import { Body, create as bodyCreate, translate as bodyTranslate, nextGroup as bodyNextGroup } from "../body/Body";
+import { Body, create as bodyCreate, translate as bodyTranslate, nextGroup as bodyNextGroup } from "./Body";
 import { circle as bodiesCircle, rectangle as bodiesRectangle } from "./Bodies";
-import { create as compositeCreate, addBody, Composite, addConstraint } from "../body/Composite";
-import { Constraint, create as constraintCreate } from "../constraint/Constraint";
-import { extend } from "../core/Common";
+import { create as compositeCreate, addBody, Composite, addConstraint } from "./Composite";
+import { Constraint, create as constraintCreate } from "./Constraint";
+import { extend } from "./Common";
 
 export type CreateBodyCallback = (x: number, y: number, column: number, row: number, lastBody: Body | undefined, i: number) => Body | undefined
 

@@ -1,5 +1,5 @@
-import type { Vector } from "../geometry/Vector";
-import type { Vertex } from "../geometry/Vertices";
+import type { Vector } from "./Vector";
+import type { Vertex } from "./Vertices";
 
 export interface Contact {
     vertex: Vector;

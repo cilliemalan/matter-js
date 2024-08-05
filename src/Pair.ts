@@ -1,4 +1,4 @@
-import type { Body } from '../body/Body';
+import type { Body } from './Body';
 import type { Contact } from './Contact';
 import type { Collision } from './Collision';
 import { create as createContact } from './Contact';

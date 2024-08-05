@@ -1,14 +1,14 @@
-import { Body, CollisionFilter } from "../body/Body";
-import { allBodies } from "../body/Composite";
-import { canCollide } from "../collision/Detector";
-import { extend, ObjectBase, warn } from "../core/Common";
-import { Engine } from "../core/Engine";
-import { on, trigger } from "../core/Events";
-import { clearSourceEvents, Mouse, create as mouseCreate } from "../core/Mouse";
-import { contains as boundsContains } from "../geometry/Bounds";
+import { Body, CollisionFilter } from "./Body";
+import { allBodies } from "./Composite";
+import { canCollide } from "./Detector";
+import { extend, ObjectBase, warn } from "./Common";
+import { Engine } from "./Engine";
+import { on, trigger } from "./Events";
+import { clearSourceEvents, Mouse, create as mouseCreate } from "./Mouse";
+import { contains as boundsContains } from "./Bounds";
 import { Constraint, create as constraintCreate } from "./Constraint";
-import { contains as verticesContains } from "../geometry/Vertices";
-import { set as sleepingSet } from "../core/Sleeping";
+import { contains as verticesContains } from "./Vertices";
+import { set as sleepingSet } from "./Sleeping";
 
 export interface MouseConstraint extends ObjectBase {
     /** The `Mouse` instance in use. If not supplied in `MouseConstraint.create`, one will be created. */

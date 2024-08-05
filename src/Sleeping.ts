@@ -1,7 +1,7 @@
 import { _baseDelta } from './Common'
 import { trigger } from './Events'
-import { Body, getSpeed, getAngularSpeed } from '../body/Body'
-import { Pair } from '../collision/Pair';
+import { Body, getSpeed, getAngularSpeed } from './Body'
+import { Pair } from './Pair';
 
 export let _motionWakeThreshold = 0.18;
 export let _motionSleepThreshold = 0.08;

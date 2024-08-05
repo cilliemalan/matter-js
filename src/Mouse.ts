@@ -1,5 +1,5 @@
 import { log } from './Common'
-import { Vector } from '../geometry/Vector';
+import { Vector } from './Vector';
 
 export class Mouse {
 

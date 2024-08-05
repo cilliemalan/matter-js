@@ -1,9 +1,9 @@
-import { nextId, choose, sign, _baseDelta, BodyBase, extend } from "../core/Common";
-import { Vector, VectorAngle, add, create as cv, div, magnitude, mult, normalise, rotateAbout, rotate as rotateVector, sub } from "../geometry/Vector";
-import { Vertex, rotate as rotateVertices, create as createVertices, area, centre, translate as translateVertices, inertia, clockwiseSort, hull, scale as scaleVertices } from "../geometry/Vertices";
-import { Bounds, create as createBounds, update as updateBounds } from "../geometry/Bounds";
-import { rotate as rotateAxes, fromVertices as AxesfromVertices } from '../geometry/Axes'
-import { set as setSleeping } from "../core/Sleeping";
+import { nextId, choose, sign, _baseDelta, BodyBase, extend } from "./Common";
+import { Vector, VectorAngle, add, create as cv, div, magnitude, mult, normalise, rotateAbout, rotate as rotateVector, sub } from "./Vector";
+import { Vertex, rotate as rotateVertices, create as createVertices, area, centre, translate as translateVertices, inertia, clockwiseSort, hull, scale as scaleVertices } from "./Vertices";
+import { Bounds, create as createBounds, update as updateBounds } from "./Bounds";
+import { rotate as rotateAxes, fromVertices as AxesfromVertices } from './Axes'
+import { set as setSleeping } from "./Sleeping";
 
 export interface CollisionFilter {
     category: number;

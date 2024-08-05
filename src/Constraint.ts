@@ -1,10 +1,10 @@
-import { RenderOptions, type Body } from "../body/Body";
-import { _baseDelta, clamp, extend, nextId, type ConstraintBase } from "../core/Common";
-import { type Vector, add, sub, magnitude, rotate, mult, div, dot, cross, rotateAbout } from "../geometry/Vector";
-import { set as sleepingSet } from "../core/Sleeping";
-import { translate as verticesTranslate, rotate as verticesRotate } from "../geometry/Vertices";
-import { rotate as axesRotate } from "../geometry/Axes";
-import { update as boundsUpdate } from "../geometry/Bounds";
+import { RenderOptions, type Body } from "./Body";
+import { _baseDelta, clamp, extend, nextId, type ConstraintBase } from "./Common";
+import { type Vector, add, sub, magnitude, rotate, mult, div, dot, cross, rotateAbout } from "./Vector";
+import { set as sleepingSet } from "./Sleeping";
+import { translate as verticesTranslate, rotate as verticesRotate } from "./Vertices";
+import { rotate as axesRotate } from "./Axes";
+import { update as boundsUpdate } from "./Bounds";
 
 const _warming = 0.4;
 const _torqueDampen = 1;

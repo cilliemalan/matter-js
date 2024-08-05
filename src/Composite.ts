@@ -1,10 +1,10 @@
-import { Constraint, ConstraintRenderOptions } from '../constraint/Constraint';
-import { ChildObject, CompositeBase, extend, indexOf, nextId, ObjectType, warn } from '../core/Common'
-import { trigger } from '../core/Events';
-import { type Body, translate as bodyTranslate, setPosition as bodySetPosition, rotate as bodyRotate, scale as bodyScale } from '../body/Body';
-import { MouseConstraint } from '../constraint/MouseConstraint';
-import { Vector } from '../geometry/Vector';
-import { Bounds, create as boundsCreate } from '../geometry/Bounds';
+import { Constraint, ConstraintRenderOptions } from './Constraint';
+import { ChildObject, CompositeBase, extend, indexOf, nextId, ObjectType, warn } from './Common'
+import { trigger } from './Events';
+import { type Body, translate as bodyTranslate, setPosition as bodySetPosition, rotate as bodyRotate, scale as bodyScale } from './Body';
+import { MouseConstraint } from './MouseConstraint';
+import { Vector } from './Vector';
+import { Bounds, create as boundsCreate } from './Bounds';
 
 interface CompositeCache {
     allBodies?: Array<Body>;

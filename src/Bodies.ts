@@ -1,9 +1,9 @@
-import { Body, create as bodyCreate, setPosition } from "../body/Body";
-import { extend, warn, warnOnce } from "../core/Common";
-import { magnitudeSquared, sub, Vector } from "../geometry/Vector";
-import { fromPath, chamfer, Vertex, isConvex as verticesIsConvex, clockwiseSort, hull, area, centre } from "../geometry/Vertices";
-import { decomp, DecompVector, makeCCW, quickDecomp, removeCollinearPoints, removeDuplicatePoints } from "../geometry/Decomp";
-import { overlaps } from "../geometry/Bounds";
+import { Body, create as bodyCreate, setPosition } from "./Body";
+import { extend, warn, warnOnce } from "./Common";
+import { magnitudeSquared, sub, Vector } from "./Vector";
+import { fromPath, chamfer, Vertex, isConvex as verticesIsConvex, clockwiseSort, hull, area, centre } from "./Vertices";
+import { decomp, DecompVector, makeCCW, quickDecomp, removeCollinearPoints, removeDuplicatePoints } from "./Decomp";
+import { overlaps } from "./Bounds";
 
 export interface ChamferOptions {
     radius?: number;

@@ -1,8 +1,8 @@
 import { Pair } from "./Pair";
-import { clamp, _baseDelta } from '../core/Common';
-import { update as boundsUpdate } from "../geometry/Bounds";
-import { translate as verticesTranslate } from "../geometry/Vertices";
-import { Body } from '../body/Body';
+import { clamp, _baseDelta } from './Common';
+import { update as boundsUpdate } from "./Bounds";
+import { translate as verticesTranslate } from "./Vertices";
+import { Body } from './Body';
 
 let _restingThresh = 2;
 let _restingThreshTangent = Math.sqrt(6);

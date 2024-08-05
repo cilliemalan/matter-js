@@ -1,8 +1,8 @@
-import type { Body } from '../body/Body'
-import { rectangle } from '../factory/Bodies';
-import { Bounds, overlaps, contains as boundsContains } from '../geometry/Bounds';
-import { angle, magnitude, sub, Vector } from '../geometry/Vector';
-import { contains as verticesContains } from '../geometry/Vertices';
+import type { Body } from './Body'
+import { rectangle } from './Bodies';
+import { Bounds, overlaps, contains as boundsContains } from './Bounds';
+import { angle, magnitude, sub, Vector } from './Vector';
+import { contains as verticesContains } from './Vertices';
 import { type Collision, collides as collisionCollides } from './Collision';
 
 

@@ -5,17 +5,17 @@ import {
     allComposites as compositeAllComposites,
     allConstraints as compositeAllConstraints,
     setModified as compositeSetModified
-} from "../body/Composite";
-import { Detector, create as createDetector, setBodies as detectorSetBodies, collisions as detectorCollisions, clear as detectorClear } from "../collision/Detector";
-import { Pairs, create as createPairs, update as pairsUpdate, clear as pairsClear } from "../collision/Pairs";
-import { postSolvePosition, preSolvePosition, preSolveVelocity, solvePosition, solveVelocity } from "../collision/Resolver";
-import { postSolveAll, preSolveAll, solveAll } from "../constraint/Constraint";
-import { Vector } from "../geometry/Vector";
+} from "./Composite";
+import { Detector, create as createDetector, setBodies as detectorSetBodies, collisions as detectorCollisions, clear as detectorClear } from "./Detector";
+import { Pairs, create as createPairs, update as pairsUpdate, clear as pairsClear } from "./Pairs";
+import { postSolvePosition, preSolvePosition, preSolveVelocity, solvePosition, solveVelocity } from "./Resolver";
+import { postSolveAll, preSolveAll, solveAll } from "./Constraint";
+import { Vector } from "./Vector";
 import { _baseDelta, clamp, extend, nextId, warnOnce } from "./Common";
 import { trigger } from "./Events";
 import { update as sleepingUpdate, afterCollisions as sleepingAfterCollisions, set as sleepingSet } from './Sleeping';
-import { Body, update as bodyUpdate, updateVelocities } from "../body/Body";
-import { Render } from "../render/Render";
+import { Body, update as bodyUpdate, updateVelocities } from "./Body";
+import { Render } from "./Render";
 
 export interface Timing {
     /** A `Number` that specifies the current simulation-time in milliseconds starting from `0`. 

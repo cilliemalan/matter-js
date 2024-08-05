@@ -1,6 +1,6 @@
 import { type Pair, update as pairUpdate, create as pairCreate, setActive as pairSetActive } from './Pair'
 import type { Collision } from './Collision';
-import { extend } from '../core/Common';
+import { extend } from './Common';
 
 export interface Pairs {
     table: Record<string, Pair>;

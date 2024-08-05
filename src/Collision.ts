@@ -1,7 +1,7 @@
-import { contains } from '../geometry/Vertices';
+import { contains } from './Vertices';
 import { id as pairId, type Pair } from './Pair';
-import type { Vector } from '../geometry/Vector';
-import type { Body } from '../body/Body';
+import type { Vector } from './Vector';
+import type { Body } from './Body';
 import type { Pairs } from './Pairs';
 
 const _supports = new Array<Vector>(2);

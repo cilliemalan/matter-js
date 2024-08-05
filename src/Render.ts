@@ -7,17 +7,17 @@
 // var Vector = require('../geometry/Vector');
 // var Mouse = require('../core/Mouse');
 
-import { Mouse, setOffset as mouseSetOffset, setScale as mouseSetScale } from "../core/Mouse";
-import { Bounds, overlaps as boundsOverlaps, contains as boundsContains } from "../geometry/Bounds";
-import { add, normalise, perp, sub, Vector } from "../geometry/Vector";
-import { Engine } from "../core/Engine";
-import { clamp, extend } from "../core/Common";
-import { allBodies, allComposites, allConstraints } from "../body/Composite";
-import { trigger } from "../core/Events";
-import { Constraint } from "../constraint/Constraint";
-import { Body, getVelocity as bodyGetVelocity } from "../body/Body";
-import { Pair } from "../collision/Pair";
-import { Vertex } from "../geometry/Vertices";
+import { Mouse, setOffset as mouseSetOffset, setScale as mouseSetScale } from "./Mouse";
+import { Bounds, overlaps as boundsOverlaps, contains as boundsContains } from "./Bounds";
+import { add, normalise, perp, sub, Vector } from "./Vector";
+import { Engine } from "./Engine";
+import { clamp, extend } from "./Common";
+import { allBodies, allComposites, allConstraints } from "./Composite";
+import { trigger } from "./Events";
+import { Constraint } from "./Constraint";
+import { Body, getVelocity as bodyGetVelocity } from "./Body";
+import { Pair } from "./Pair";
+import { Vertex } from "./Vertices";
 
 export interface Render {
     /** A reference to the `Matter.Engine` instance to be used. */

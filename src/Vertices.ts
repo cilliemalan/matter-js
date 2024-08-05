@@ -8,9 +8,9 @@
 * @class Vertices
 */
 
-import { Body } from '../body/Body'
+import { Body } from './Body'
 import { Vector, cross, mult, add, div, dot, sub, normalise, cross3, angle, rotate as rotatev } from './Vector'
-import { clamp, clone } from '../core/Common'
+import { clamp, clone } from './Common'
 
 export interface Vertex extends Vector {
     index: number;

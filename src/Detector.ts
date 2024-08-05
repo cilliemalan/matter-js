@@ -1,7 +1,7 @@
 import { type Collision, collides } from './Collision'
-import type { Body, CollisionFilter } from '../body/Body'
+import type { Body, CollisionFilter } from './Body'
 import type { Pairs } from './Pairs';
-import { extend } from '../core/Common';
+import { extend } from './Common';
 
 
 export interface Detector {

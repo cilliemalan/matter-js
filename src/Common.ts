@@ -1,6 +1,6 @@
-import { Body } from "../body/Body";
-import { Composite } from "../body/Composite";
-import { Constraint } from "../constraint/Constraint";
+import { Body } from "./Body";
+import { Composite } from "./Composite";
+import { Constraint } from "./Constraint";
 
 export let _baseDelta = 1000 / 60;
 let _nextId = 0;
