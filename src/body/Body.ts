@@ -16,6 +16,7 @@ export interface SpriteInformation {
     yScale: number;
     xOffset: number;
     yOffset: number;
+    texture?: string;
 }
 
 export type RenderType = "line" | "pin" | "spring";
@@ -28,13 +29,13 @@ export interface RenderOptions {
      * A `String` that defines the stroke style to use when rendering the outline.
      * It is the same as when using a canvas, so it accepts CSS style property values.
      */
-    strokeStyle?: string;
-    fillStyle?: unknown;
+    strokeStyle?: string | CanvasGradient | CanvasPattern;
+    fillStyle?: string | CanvasGradient | CanvasPattern;
     /**
      * A `Number` that defines the line width to use when rendering the outline.
      * A value of `0` means no outline will be rendered.
      */
-    lineWidth?: number | string;
+    lineWidth?: number;
     sprite?: SpriteInformation;
     /**
      * A `String` that defines the rendering type. 
