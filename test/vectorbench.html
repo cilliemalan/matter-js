@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        function getRandomFloats(howmany) {
+            const floats = new Array(howmany);
+            const rnd = new Uint32Array(1000);
+
+            for (let i = 0; i < howmany; i += 1000) {
+                crypto.getRandomValues(rnd);
+                for (let x = 0; x < 1000 && x + i < howmany; x++) {
+                    floats[i + x] = rnd[x] * 2.328306437622898e-10;
+                }
+            }
+
+            return floats;
+        }
+
+        addEventListener("load", async function () {
+
+            // test 1: array array
+            const prebox = document.getElementById("notes");
+            function note(n) {
+                if (!n) {
+                    return;
+                }
+
+                const d = document.createElement("div");
+                d.innerText = typeof n === 'string' ? n : n.toString();
+                prebox.appendChild(d);
+                return d;
+            }
+            function errornote(n) {
+                if (!n) {
+                    return;
+                }
+
+                note(n).style.color = '#900';
+            }
+
+            async function measure(text, wut) {
+                const a = performance.now();
+                try {
+                    const z = wut();
+                    if (z instanceof Promise) {
+                        await z;
+                    }
+                } catch (e) {
+                    errornote(e);
+                }
+                const b = performance.now();
+
+                note(`${text} (${(b - a).toFixed(1)}ms)`);
+            }
+
+            note(`Generating some floats...`);
+            let floats;
+            measure('generate 1000000 floats',
+                () => floats = getRandomFloats(1000000));
+
+        });
+    </script>
+    <pre id="notes"></pre>
+</body>
+
+</html>
