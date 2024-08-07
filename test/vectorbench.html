@@ -5,18 +5,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            background: #333;
+            color: #eee;
+        }
+    </style>
 </head>
 
 <body>
     <script>
 
+        class Vector {
+            x;
+            y;
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+
+        function vector(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        function adda(v1, v2) {
+            return [v1[0] + v2[0], v1[1] + v2[1]];
+        }
+
+        function suba(v1, v2) {
+            return [v1[0] - v2[0], v1[1] - v2[1]];
+        }
+
+        function dota(v1, v2) {
+            return v1[0] * v2[0] + v1[1] * v2[1];
+        }
+
+        function maga(v1, v2) {
+            return Math.sqrt(v1[0] * v2[0] + v1[1] * v2[1]);
+        }
+
+        function crossa(v1, v2) {
+            return v1[0] * v2[1] - v1[1] * v2[0];
+        }
+
+        function scala(v1, n) {
+            return [v1[0] * n, v1[1] * n];
+        }
+
+        function norma(v1) {
+            const sqmag = v1[0] * v1[0] + v1[1] * v1[1];
+            if (sqmag === 0) {
+                return [0, 0];
+            }
+
+            const oomag = 1.0 / Math.sqrt(sqmag);
+            return [v1[0] * oomag, v1[1] * oomag];
+        }
+
+        function addv(v1, v2) {
+            return { x: v1.x + v2.x, y: v1.y + v2.y };
+        }
+
+        function subv(v1, v2) {
+            return { x: v1.x - v2.x, y: v1.y - v2.y };
+        }
+
+        function dotv(v1, v2) {
+            return v1.x * v2.x + v1.y * v2.y;
+        }
+
+        function magv(v1, v2) {
+            return Math.sqrt(v1.x * v2.x + v1.y * v2.y);
+        }
+
+        function crossv(v1, v2) {
+            return v1.x * v2.y - v1.y * v2.x;
+        }
+
+        function scalv(v1, n) {
+            return [v1.x * n, v1.y * n];
+        }
+
+        function normv(v1) {
+            const sqmag = v1.x * v1.x + v1.y * v1.y;
+            if (sqmag === 0) {
+                return [0, 0];
+            }
+
+            const oomag = 1.0 / Math.sqrt(sqmag);
+            return { x: v1.x * oomag, y: v1.y * oomag };
+        }
+
         function getRandomFloats(howmany) {
             const floats = new Array(howmany);
-            const rnd = new Uint32Array(1000);
+            const nrnds = 10000;
+            const rnd = new Uint32Array(nrnds);
 
-            for (let i = 0; i < howmany; i += 1000) {
+            for (let i = 0; i < howmany; i += nrnds) {
                 crypto.getRandomValues(rnd);
-                for (let x = 0; x < 1000 && x + i < howmany; x++) {
+                for (let x = 0; x < nrnds && x + i < howmany; x++) {
                     floats[i + x] = rnd[x] * 2.328306437622898e-10;
                 }
             }
@@ -28,6 +117,7 @@
 
             // test 1: array array
             const prebox = document.getElementById("notes");
+
             function note(n) {
                 if (!n) {
                     return;
@@ -38,12 +128,13 @@
                 prebox.appendChild(d);
                 return d;
             }
+
             function errornote(n) {
                 if (!n) {
                     return;
                 }
 
-                note(n).style.color = '#900';
+                note(n).style.color = 'red';
             }
 
             async function measure(text, wut) {
@@ -53,18 +144,117 @@
                     if (z instanceof Promise) {
                         await z;
                     }
-                } catch (e) {
-                    errornote(e);
-                }
-                const b = performance.now();
 
-                note(`${text} (${(b - a).toFixed(1)}ms)`);
+                    const b = performance.now();
+                    note(`${text} (${(b - a).toFixed(1)}ms)`);
+
+                } catch (e) {
+                    const b = performance.now();
+                    errornote(`${e.stack} (${(b - a).toFixed(1)}ms)`);
+                }
             }
 
             note(`Generating some floats...`);
+            /** @type {number[]} */
             let floats;
-            measure('generate 1000000 floats',
-                () => floats = getRandomFloats(1000000));
+            const nfloats = 4000000;
+            measure(`generate ${nfloats} floats`, function generateFloats() {
+                floats = getRandomFloats(nfloats);
+            })
+
+
+
+            let veca1 = new Array(floats.length / 4);
+            let veca2 = new Array(floats.length / 4);
+            measure('convert to ARRAY vectors', function createArrayVectors() {
+                for (let i = 0; i < floats.length / 4; i++) {
+                    veca1[i] = [floats[i * 4 + 0], floats[i * 4 + 1]];
+                    veca2[i] = [floats[i * 4 + 2], floats[i * 4 + 3]];
+                }
+            })
+
+            let vecb1 = new Array(floats.length / 4);
+            let vecb2 = new Array(floats.length / 4);
+            measure('convert to OBJECT vectors', function createObjectVectors() {
+                for (let i = 0; i < floats.length / 4; i++) {
+                    vecb1[i] = { x: floats[i * 4 + 0], y: floats[i * 4 + 1] };
+                    vecb2[i] = { x: floats[i * 4 + 2], y: floats[i * 4 + 3] };
+                }
+            })
+
+            let vecc1 = new Array(floats.length / 4);
+            let vecc2 = new Array(floats.length / 4);
+            measure('convert to CLASS vectors', function createClassVectors() {
+                for (let i = 0; i < floats.length / 4; i++) {
+                    vecb1[i] = new Vector(floats[i * 4 + 0], floats[i * 4 + 1]);
+                    vecb2[i] = new Vector(floats[i * 4 + 2], floats[i * 4 + 3]);
+                }
+            })
+
+
+            let vecd1 = new Array(floats.length / 4);
+            let vecd2 = new Array(floats.length / 4);
+            measure('convert to FUNCTION vectors', function createFunctionVectors() {
+                for (let i = 0; i < floats.length / 4; i++) {
+                    vecb1[i] = new vector(floats[i * 4 + 0], floats[i * 4 + 1]);
+                    vecb2[i] = new vector(floats[i * 4 + 2], floats[i * 4 + 3]);
+                }
+            })
+
+
+
+
+
+
+            measure('math with ARRAY vectors', function createArrayVectors() {
+                for (let i = 0; i < veca1.length; i++) {
+                    const a = maga(veca1[i], veca2[i]);
+                    const b = dota(veca2[i], veca1[i]);
+                    const c = crossa(norma(veca1[i]), veca2[i]);
+                    suba(
+                        norma(veca2[i]),
+                        adda(
+                            scala(addv(veca1[i], veca1[i]), a),
+                            scala(addv(veca2[i], veca2[i]), b * c)))
+                }
+            });
+
+            measure('math with OBJECT vectors', function createArrayVectors() {
+                for (let i = 0; i < vecb1.length; i++) {
+                    const a = magv(vecb1[i], vecb2[i]);
+                    const b = dotv(vecb2[i], vecb1[i]);
+                    const c = crossv(normv(vecb1[i]), vecb2[i]);
+                    subv(
+                        normv(vecb2[i]),
+                        addv(
+                            scalv(addv(vecb1[i], vecb1[i]), a),
+                            scalv(addv(vecb2[i], vecb2[i]), b * c)))
+                }
+            });
+
+            measure('more math with ARRAY vectors', function createArrayVectors() {
+                for (let i = 0; i < veca1.length; i++) {
+                    const n1 = norma(veca1[i]);
+                    const n2 = norma(veca2[i]);
+                    const n3 = norma(veca1[i]);
+                    const n4 = norma(veca2[i]);
+                    const n5 = norma(veca2[i]);
+                    const a = crossa(n1, n2);
+                    const b = dota(n3, n4);
+                }
+            });
+
+            measure('more math with OBJECT vectors', function createArrayVectors() {
+                for (let i = 0; i < vecb1.length; i++) {
+                    const n1 = normv(vecb1[i]);
+                    const n2 = normv(vecb2[i]);
+                    const n3 = normv(vecb1[i]);
+                    const n4 = normv(vecb2[i]);
+                    const n5 = normv(vecb2[i]);
+                    const a = crossv(n1, n2);
+                    const b = dotv(n3, n4);
+                }
+            });
 
         });
     </script>
