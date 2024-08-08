@@ -1,7 +1,7 @@
-import mixed from './mixed';
+import { mixed } from './mixed';
 import './style.css'
 
-const {canvas} = mixed();
+const { canvas } = mixed();
 
 document.getElementById("app")!.appendChild(canvas);
 

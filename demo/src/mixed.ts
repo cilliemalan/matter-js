@@ -1,93 +1,113 @@
-import { create as engineCreate } from '../../src/Engine'
-import { create as renderCreate, RenderOptions, run as renderRun, lookAt as renderLookAt, LookAtParm, stop as renderStop } from '../../src/Render'
-import { create as runnerCreate, run as runnerRun, stop as runnerStop } from '../../src/Runner'
-import { stack as compositesStack } from '../../src/Composites'
-import { add as compositeAdd } from '../../src/Composite';
-import { random } from '../../src/Common';
-import { polygon, rectangle } from '../../src/Bodies';
-import { create as mouseCreate } from '../../src/Mouse'
-import { create as mouseConstraintCreate } from '../../src/MouseConstraint'
+import * as Engine from "matter/Engine";
+import * as Render from "matter/Render";
+import * as Runner from "matter/Runner";
+import * as Composites from 'matter/Composites';
+import * as Common from 'matter/Common';
+import * as MouseConstraint from 'matter/MouseConstraint';
+import * as Mouse from 'matter/Mouse';
+import * as Composite from 'matter/Composite';
+import * as Bodies from 'matter/Bodies';
 
-export default function () {
+export interface ExampleContext {
+    engine: Engine.Engine;
+    runner: Runner.Runner;
+    render: Render.Render;
+    canvas: HTMLCanvasElement;
+    stop: () => void;
+}
+
+export type ExampleFunction = () => ExampleContext;
+
+export interface Example extends ExampleFunction {
+    title?: string;
+    for?: string;
+}
+
+export const mixed: Example = function (): ExampleContext {
+    // var Engine = Matter.Engine,
+    //     Render = Matter.Render,
+    //     Runner = Matter.Runner,
+    //     Composites = Matter.Composites,
+    //     Common = Matter.Common,
+    //     MouseConstraint = Matter.MouseConstraint,
+    //     Mouse = Matter.Mouse,
+    //     Composite = Matter.Composite,
+    //     Bodies = Matter.Bodies;
 
     // create engine
-    let engine = engineCreate();
-    let world = engine.world;
-
-    const renderOptions = {
-        width: 800,
-        height: 600,
-        showAngleIndicator: true,
-    } as unknown as RenderOptions;
-
-    engine.timing.timeScale = 0.1;
+    var engine = Engine.create(),
+        world = engine.world;
 
     // create renderer
-    let render = renderCreate({
+    var render = Render.create({
         element: document.body,
         engine: engine,
-        options: renderOptions
+        options: {
+            width: 800,
+            height: 600,
+            showAngleIndicator: true,
+        } as any
     });
 
-    renderRun(render);
+    Render.run(render);
 
     // create runner
-    var runner = runnerCreate();
-    runnerRun(runner, engine);
+    var runner = Runner.create();
+    Runner.run(runner, engine);
 
     // add bodies
-    var stack = compositesStack(20, 20, 10, 5, 0, 0, function (x, y) {
-        var sides = Math.round(random(1, 8));
+    var stack = Composites.stack(20, 20, 10, 5, 0, 0, function (x, y) {
+        var sides = Math.round(Common.random(1, 8));
 
         // round the edges of some bodies
         var chamfer = undefined;
-        if (sides > 2 && random() > 0.7) {
+        if (sides > 2 && Common.random() > 0.7) {
             chamfer = {
                 radius: 10
             };
         }
 
-        switch (Math.round(random(0, 1))) {
+        switch (Math.round(Common.random(0, 1))) {
             case 0:
-                if (random() < 0.8) {
-                    return rectangle(x, y, random(25, 50), random(25, 50), { chamfer: chamfer });
+                if (Common.random() < 0.8) {
+                    return Bodies.rectangle(x, y, Common.random(25, 50), Common.random(25, 50), { chamfer: chamfer });
                 } else {
-                    return rectangle(x, y, random(80, 120), random(25, 30), { chamfer: chamfer });
+                    return Bodies.rectangle(x, y, Common.random(80, 120), Common.random(25, 30), { chamfer: chamfer });
                 }
             case 1:
-                return polygon(x, y, sides, random(25, 50), { chamfer: chamfer });
+                return Bodies.polygon(x, y, sides, Common.random(25, 50), { chamfer: chamfer });
         }
     });
 
-    compositeAdd(world, [
+    Composite.add(world, stack);
+
+    Composite.add(world, [
         // walls
-        rectangle(400, 0, 800, 50, { isStatic: true }),
-        rectangle(400, 600, 800, 50, { isStatic: true }),
-        rectangle(800, 300, 50, 600, { isStatic: true }),
-        rectangle(0, 300, 50, 600, { isStatic: true })
+        Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
+        Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
+        Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
+        Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
     ]);
 
-    compositeAdd(world, stack);
-
     // add mouse control
-    var mouse = mouseCreate(render.canvas),
-        mouseConstraint = mouseConstraintCreate(engine, {
+    var mouse = Mouse.create(render.canvas),
+        mouseConstraint = MouseConstraint.create(engine, {
             mouse: mouse,
             constraint: {
                 stiffness: 0.2,
                 render: {
                     visible: false
                 }
-            } as unknown as any
+            } as any
         });
 
-    compositeAdd(world, mouseConstraint);
+    Composite.add(world, mouseConstraint);
 
     // keep the mouse in sync with rendering
     render.mouse = mouse;
 
     // fit the render viewport to the scene
-    renderLookAt(render, <LookAtParm>{
+    Render.lookAt(render, {
         min: { x: 0, y: 0 },
         max: { x: 800, y: 600 }
     });
@@ -99,8 +119,11 @@ export default function () {
         render: render,
         canvas: render.canvas,
         stop: function () {
-            renderStop(render);
-            runnerStop(runner);
+            Render.stop(render);
+            Runner.stop(runner);
         }
     };
-}
+};
+
+mixed.title = 'Mixed Shapes';
+mixed.for = '>=0.14.2';
