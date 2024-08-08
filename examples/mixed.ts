@@ -7,32 +7,9 @@ import * as MouseConstraint from 'matter/MouseConstraint';
 import * as Mouse from 'matter/Mouse';
 import * as Composite from 'matter/Composite';
 import * as Bodies from 'matter/Bodies';
+import { Example } from './_common'
 
-export interface ExampleContext {
-    engine: Engine.Engine;
-    runner: Runner.Runner;
-    render: Render.Render;
-    canvas: HTMLCanvasElement;
-    stop: () => void;
-}
-
-export type ExampleFunction = () => ExampleContext;
-
-export interface Example extends ExampleFunction {
-    title?: string;
-    for?: string;
-}
-
-export const mixed: Example = function (): ExampleContext {
-    // var Engine = Matter.Engine,
-    //     Render = Matter.Render,
-    //     Runner = Matter.Runner,
-    //     Composites = Matter.Composites,
-    //     Common = Matter.Common,
-    //     MouseConstraint = Matter.MouseConstraint,
-    //     Mouse = Matter.Mouse,
-    //     Composite = Matter.Composite,
-    //     Bodies = Matter.Bodies;
+export const mixed: Example = function () {
 
     // create engine
     var engine = Engine.create(),
