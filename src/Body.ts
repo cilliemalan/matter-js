@@ -205,7 +205,7 @@ export function create(options?: Partial<Body>) {
         bounds: { min: { x: 0, y: 0 }, max: { x: 40, y: 40 } },
         chamfer: undefined,
         circleRadius: 0,
-        positionPrev: { x: 0, y: 0 },
+        positionPrev: undefined!,
         anglePrev: 0,
         parent: undefined as unknown as Body,
         axes: [],
