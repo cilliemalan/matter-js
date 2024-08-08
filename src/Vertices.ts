@@ -56,7 +56,7 @@ export function create(points: Vector[], body: Body): Vertex[] {
  * into a `Matter.Vertices` object for the given `Matter.Body`.
  * For parsing SVG paths, see `Svg.pathToVertices`.
  */
-export function fromPath(path: string, body: Body) {
+export function fromPath(path: string, body?: Body) {
     const pathPattern = /L?\s*([-\d.e]+)[\s,]*([-\d.e]+)*/ig;
     const points = new Array<Vector>;
 
@@ -71,7 +71,7 @@ export function fromPath(path: string, body: Body) {
         })
     }
 
-    return create(points, body);
+    return create(points, body!);
 };
 
 /**
