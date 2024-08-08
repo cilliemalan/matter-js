@@ -1,15 +1,15 @@
-import * as Engine from "matter/Engine";
-import * as Render from "matter/Render";
-import * as Runner from "matter/Runner";
-import * as Composites from 'matter/Composites';
-import * as Common from 'matter/Common';
-import * as MouseConstraint from 'matter/MouseConstraint';
-import * as Mouse from 'matter/Mouse';
-import * as Composite from 'matter/Composite';
-import * as Bodies from 'matter/Bodies';
-import { Example } from './_common'
+var Example = Example || {};
 
-export const mixed: Example = function () {
+Example.mixed = function() {
+    var Engine = Matter.Engine,
+        Render = Matter.Render,
+        Runner = Matter.Runner,
+        Composites = Matter.Composites,
+        Common = Matter.Common,
+        MouseConstraint = Matter.MouseConstraint,
+        Mouse = Matter.Mouse,
+        Composite = Matter.Composite,
+        Bodies = Matter.Bodies;
 
     // create engine
     var engine = Engine.create(),
@@ -23,7 +23,7 @@ export const mixed: Example = function () {
             width: 800,
             height: 600,
             showAngleIndicator: true,
-        } as any
+        }
     });
 
     Render.run(render);
@@ -33,11 +33,11 @@ export const mixed: Example = function () {
     Runner.run(runner, engine);
 
     // add bodies
-    var stack = Composites.stack(20, 20, 10, 5, 0, 0, function (x, y) {
+    var stack = Composites.stack(20, 20, 10, 5, 0, 0, function(x, y) {
         var sides = Math.round(Common.random(1, 8));
 
         // round the edges of some bodies
-        var chamfer = undefined;
+        var chamfer = null;
         if (sides > 2 && Common.random() > 0.7) {
             chamfer = {
                 radius: 10
@@ -45,14 +45,14 @@ export const mixed: Example = function () {
         }
 
         switch (Math.round(Common.random(0, 1))) {
-            case 0:
-                if (Common.random() < 0.8) {
-                    return Bodies.rectangle(x, y, Common.random(25, 50), Common.random(25, 50), { chamfer: chamfer });
-                } else {
-                    return Bodies.rectangle(x, y, Common.random(80, 120), Common.random(25, 30), { chamfer: chamfer });
-                }
-            case 1:
-                return Bodies.polygon(x, y, sides, Common.random(25, 50), { chamfer: chamfer });
+        case 0:
+            if (Common.random() < 0.8) {
+                return Bodies.rectangle(x, y, Common.random(25, 50), Common.random(25, 50), { chamfer: chamfer });
+            } else {
+                return Bodies.rectangle(x, y, Common.random(80, 120), Common.random(25, 30), { chamfer: chamfer });
+            }
+        case 1:
+            return Bodies.polygon(x, y, sides, Common.random(25, 50), { chamfer: chamfer });
         }
     });
 
@@ -75,7 +75,7 @@ export const mixed: Example = function () {
                 render: {
                     visible: false
                 }
-            } as any
+            }
         });
 
     Composite.add(world, mouseConstraint);
@@ -95,12 +95,16 @@ export const mixed: Example = function () {
         runner: runner,
         render: render,
         canvas: render.canvas,
-        stop: function () {
-            Render.stop(render);
-            Runner.stop(runner);
+        stop: function() {
+            Matter.Render.stop(render);
+            Matter.Runner.stop(runner);
         }
     };
 };
 
-mixed.title = 'Mixed Shapes';
-mixed.for = '>=0.14.2';
+Example.mixed.title = 'Mixed Shapes';
+Example.mixed.for = '>=0.14.2';
+
+if (typeof module !== 'undefined') {
+    module.exports = Example.mixed;
+}

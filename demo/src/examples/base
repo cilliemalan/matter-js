@@ -1,0 +1,12 @@
+import * as Bodies from 'matter/Bodies';
+import * as Body from 'matter/Body';
+import * as Common from 'matter/Common';
+import * as Composite from 'matter/Composite';
+import * as Composites from 'matter/Composites';
+import * as Constraint from 'matter/Constraint';
+import * as Engine from "matter/Engine";
+import * as Mouse from 'matter/Mouse';
+import * as MouseConstraint from 'matter/MouseConstraint';
+import * as Render from "matter/Render";
+import * as Runner from "matter/Runner";
+import * as Vector from "matter/Vector";

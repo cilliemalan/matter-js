@@ -83,17 +83,7 @@ export const newtonsCradle: Example = function () {
 newtonsCradle.title = 'Newton\'s Cradle';
 newtonsCradle.for = '>=0.14.2';
 
-/**
-* Creates a composite with a Newton's Cradle setup of bodies and constraints.
-* @method newtonsCradle
-* @param {number} xx
-* @param {number} yy
-* @param {number} number
-* @param {number} size
-* @param {number} length
-* @return {composite} A new composite newtonsCradle body
-*/
-const createNewtonsCradle = function (xx, yy, number, size, length) {
+const createNewtonsCradle = function (xx: number, yy: number, number: number, size: number, length: number) {
 
     var newtonsCradle = Composite.create({ label: 'Newtons Cradle' });
 
